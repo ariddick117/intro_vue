@@ -6,9 +6,10 @@ var vm = new Vue({
   data: {
     // mock up the user - this well eventually come from the database UMS (user management system)
     user: {
-      isAdmin: true,
-      isLoggedIn: true,
-      avatar: 'thor.png'
+      // TEMP CONTENT
+      // iadmin: true,
+      // isLoggedIn: true,
+      // avatar: null //'thor.png'
     },
 
 
@@ -24,6 +25,12 @@ var vm = new Vue({
     videosource: "",
 
     showDetails: false
+  },
+
+  created: function() {
+    // vue instance is ready to go, mostly - add some live data to the VM
+    console.log('created lifecycle hook fired, go and get the user data');
+    this.fetchUsers();
   },
 
   methods: {
@@ -51,7 +58,23 @@ var vm = new Vue({
       this.videosource = vidsource;
 
       this.showDetails = true;
-    }
+    },
 
+    fetchUsers() {
+      // get our user data here and push it back into the VM
+      console.log('fetch user data here');
+
+      const url = './includes/index.php?user=true';
+
+      fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        console.log(data);
+
+        // push our user data into the Vue Model
+        this.user = data[0];
+      })
+      .catch((err) => console.log(err))
+    }
   }
 });
